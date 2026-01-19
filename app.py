@@ -1,6 +1,9 @@
 import pyfiglet
 import os
 import login
+from database import configs
+
+configs.create_db()
 
 banner = "HabitTracker"
 banner_ascii_art = pyfiglet.figlet_format(banner)

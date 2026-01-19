@@ -1,5 +1,6 @@
 import questionary as qst
 from API import api
+import menu
 
 def initial_prompt():
     while True:
@@ -14,6 +15,7 @@ def initial_prompt():
 
         if answer == "Login":
             login()
+            break                                           # remove
         elif answer == "Register":
             register()
         else:
@@ -27,7 +29,7 @@ def login():
 
     if api_call == True:
         print("Successfully logged in. Welcome again!")
-        # main_menu()
+        menu.main_menu()
 
 def register():
     username = qst.text("Username:").ask()

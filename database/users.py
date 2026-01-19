@@ -1,12 +1,10 @@
-from database.configs import DB_PATH, create_db
+from database.configs import DB_PATH
 import sqlite3
 
-connection = sqlite3.connect(DB_PATH)
-cursor = connection.cursor()
-
-create_db()
-
 def read(username, password):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
     cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)")
     cursor.execute(f"SELECT * FROM users WHERE username = '{username}'")
     user_db = cursor.fetchone()
@@ -24,7 +22,13 @@ def read(username, password):
         return False
 
 def write(username, password):
-    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)")
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
 
+    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)")
     cursor.execute(f"INSERT INTO users (username, password) VALUES ('{username}', '{password}')")
+
+    connection.commit()
+    connection.close()
+
     return True 
