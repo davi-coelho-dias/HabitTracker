@@ -9,6 +9,7 @@ def create_db():
     cursor  = connection.cursor()
     cursor.execute("PRAGMA foreign_keys = ON")
 
+    # Table for holding user info
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,14 +18,25 @@ def create_db():
         )
     """)
     
+    # Table for holding what was done in what day
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS days (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            habit_id INTEGER,
+            date DATE NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users (id),
+            FOREIGN KEY (habit_id) REFERENCES habits (id)           
+        )
+    """)
+
+    # Table for holding what habit belongs to each user
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS habits (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            habit_name TEXT NOT NULL,
-            register_date DATE NOT NULL,
-            practiced BOOLEAN,
-            FOREIGN KEY (user_id) REFERENCES users (id)           
+            habit TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
 

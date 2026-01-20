@@ -1,4 +1,4 @@
-from database import users
+from database import users, days
 
 def read(username, password):
     username = username.lower()
@@ -19,3 +19,25 @@ def write(username, password):
 
     if return_value:
         return True
+    
+def get_user_id(username):
+    user_id = users.get_user_id(username)
+    return user_id
+    
+def all_entries(username):
+    records = days.read_all(username)
+    clean_records = [line[0] for line in records] # transforms a list of tuples in a simple list of strings
+
+    return clean_records
+
+def get_habits_by_date(username, date):
+    data = days.get_habits_by_date()
+
+    return data
+
+def create_entry(data_tuple, user_id):
+    date = data_tuple[0]
+    habits = data_tuple[1]
+
+    for habit in habits:
+        users.save_tracking_habits(date, habit, user_id)

@@ -3,6 +3,8 @@ from API import api
 import menu
 
 def initial_prompt():
+    global user_id
+
     while True:
         answer = qst.select(
             ">>>",
@@ -14,14 +16,16 @@ def initial_prompt():
         ).ask()
 
         if answer == "Login":
-            login()
+            login(user_id)
             break                                           # remove
         elif answer == "Register":
-            register()
+            user_id = register()
         else:
             quit()
 
-def login():
+# LOGIN SYSTEM:
+
+def login(user_id):
     username = qst.text("Username:").ask()
     password = qst.text("Password:").ask() # I know
 
@@ -29,7 +33,7 @@ def login():
 
     if api_call == True:
         print("Successfully logged in. Welcome again!")
-        menu.main_menu()
+        menu.main_menu(username, user_id)
 
 def register():
     username = qst.text("Username:").ask()
@@ -38,6 +42,8 @@ def register():
     api_call = api.write(username, password)
 
     if api_call == True:
+        user_id = api.get_user_id(username)
         print("Registration complete. Welcome!")
+        return user_id
     else:
         print("Something wrong happened. Try again.")

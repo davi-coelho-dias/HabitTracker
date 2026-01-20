@@ -9,6 +9,8 @@ def read(username, password):
     cursor.execute(f"SELECT * FROM users WHERE username = '{username}'")
     user_db = cursor.fetchone()
 
+    connection.close()
+
     if user_db:
         password_db = user_db[2] # user_db is a tuple (id, username, password)
 
@@ -32,3 +34,41 @@ def write(username, password):
     connection.close()
 
     return True 
+
+def get_user_id(username):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(f"SELECT id FROM users WHERE username = '{username}'")
+    result = cursor.fetchone()
+
+    connection.close()
+
+    if result:
+        user_id = result[0]
+    else:
+        user_id = None
+
+    return user_id
+
+def save_tracking_habits(date, habit_name, user_id):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(f"SELECT id FROM habits WHERE habit = '{habit_name}' AND user_id = '{user_id}'")
+    result = cursor.fetchone()
+
+    if result:
+        habit_id = result[0]
+    else:
+        cursor.execute(f"INSERT INTO habits (user_id, habit) VALUES ('{user_id}', '{habit_name}')")
+        connection.commit()
+        habit_id = cursor.lastrowid
+
+    cursor.execute(f"""
+        INSERT INTO days (user_id, habit_id, date)
+        VALUES ('{user_id}', '{habit_id}', '{date}')
+    """)
+
+    connection.commit()
+    connection.close()
