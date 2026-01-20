@@ -72,3 +72,12 @@ def save_tracking_habits(date, habit_name, user_id):
 
     connection.commit()
     connection.close()
+
+def delete_day_records(date, user_id):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(f"DELETE FROM days WHERE date = '{date}' AND user_id = '{user_id}'")
+
+    connection.commit()
+    connection.close()

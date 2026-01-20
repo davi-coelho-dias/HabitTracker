@@ -41,3 +41,13 @@ def create_entry(data_tuple, user_id):
 
     for habit in habits:
         users.save_tracking_habits(date, habit, user_id)
+
+def update_entry(data_tuple, user_id):
+    date = data_tuple[0]
+
+    users.delete_day_records(date, user_id)
+    
+    create_entry(data_tuple, user_id)
+
+def delete_entry(date, user_id):
+    users.delete_day_records(date, user_id)
