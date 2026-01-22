@@ -3,7 +3,7 @@ from API import api
 import menu
 
 def initial_prompt():
-    global user_id
+    user_id = None
 
     while True:
         answer = qst.select(
@@ -17,7 +17,6 @@ def initial_prompt():
 
         if answer == "Login":
             login(user_id)
-            break                                           # remove
         elif answer == "Register":
             user_id = register()
         else:

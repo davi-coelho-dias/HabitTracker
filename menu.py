@@ -1,7 +1,6 @@
 import os
 import questionary as qst
 from API import api
-import edition_menu
 from datetime import date
 
 # Main menu functionalities: 
@@ -19,22 +18,28 @@ def main_menu(username, user_id):
             ">>>",
             choices=[
                 "Show all daily records",
-                "Edit(Create, Update, Delete)"
+                "Edit(Create, Update, Delete)",
+                "Log Out",
+                "Quit"
             ]
         ).ask()
 
         if answer == "Show all daily records":
-            show_all(username)
-        elif answer == "Edit(Create, Update, Delete":
-            edit_menu(username)
+            show_all(username, user_id)
+        elif answer == "Edit(Create, Update, Delete)":
+            edit_menu(username, user_id)
+        elif answer == "Log Out":
+            return
+        elif answer == "Quit":
+            quit()
 
 def show_all(username):
-    all_entries = api.all_entries(username) # a list of all dates within the database
+    all_entries = api.all_entries(username)
 
     selected_date = qst.select(
         ">>>",
         choices=[
-            line for line in all_entries
+            line for line in all_entries # this is not working (inside choices all_entries is another list, there can only be values)
         ]
     ).ask()
 
@@ -52,11 +57,13 @@ def edit_menu(username, user_id):
             choices=[
                 "Create entry",
                 "Update entry",
-                "Delete entry"
+                "Delete entry",
+                "Go Back",
+                "Quit",
             ]
         ).ask()
 
-        if option == "Create Entry":
+        if option == "Create entry":
             entry_date = qst.select(
                 "Is the date of this entry today?",
                 choices=[
@@ -70,14 +77,16 @@ def edit_menu(username, user_id):
             else:
                 entry_date = qst.text("Please provide the date(Example of date: 2026-01-24):").ask() # Treat this
             create_entry(entry_date, user_id)
-        
-        elif option == "Update Entry":
+        elif option == "Update entry":
             update_date = qst.text("From which date would you like to update(Example of date: 2026-01-24):").ask()
             update_entry(update_date, user_id)
-        
-        elif option == "Delete Entry":
+        elif option == "Delete entry":
             delete_date = qst.text("Which date would you like to delete from database(Example of date: 2026-01-24)").ask()
             delete_entry(delete_date, user_id)
+        elif option == "Go Back":
+            return
+        elif option == "Quit":
+            quit()
 
 def create_entry(date, user_id):
     data = qst.text("Provide the habits you practiced on this date(Use a list of comma separated values with no space. Ex: Exercised,Read,Worked,Coded)").ask()
