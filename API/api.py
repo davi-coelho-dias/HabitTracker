@@ -26,21 +26,21 @@ def get_user_id(username):
     
 def all_entries(username):
     records = days.read_all(username)
-    clean_records = [line[0] for line in records] # transforms a list of tuples in a simple list of strings
+    clean_records = sorted(list(set([line[0] for line in records])))
 
     return clean_records
 
 def get_habits_by_date(username, date):
-    data = days.get_habits_by_date()
+    data = days.get_habits_by_date(username, date)
 
     return data
 
 def create_entry(data_tuple, user_id):
     date = data_tuple[0]
-    habits = data_tuple[1]
+    habits = data_tuple[1] # list of strings
 
     for habit in habits:
-        users.save_tracking_habits(date, habit, user_id)
+        users.save_tracking_habits(date, habit, user_id) 
 
 def update_entry(data_tuple, user_id):
     date = data_tuple[0]

@@ -23,22 +23,21 @@ def create_db():
         CREATE TABLE IF NOT EXISTS days (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            habit_id INTEGER,
+            habit TEXT NOT NULL,
             date DATE NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users (id),
-            FOREIGN KEY (habit_id) REFERENCES habits (id)           
+            FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
 
     # Table for holding what habit belongs to each user
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS habits (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            habit TEXT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users (id)
-        )
-    """)
+    # cursor.execute("""
+    #     CREATE TABLE IF NOT EXISTS habits (
+    #         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #         user_id INTEGER,
+    #         habit TEXT NOT NULL,
+    #         FOREIGN KEY (user_id) REFERENCES users (id)
+    #     )
+    # """)
 
     connection.commit()
     connection.close()

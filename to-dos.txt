@@ -1,5 +1,7 @@
-1. 19/01/2026 [Not Done] -> Once I register, I'd like to enter the system immediately and not have to login.
+1. 19/01/2026 [Cancelled] -> Once I register, I'd like to enter the system immediately and not have to login. (Can potentially break the system so this is cancelled)
 
-2. 22/01/2026 [Not Done] -> Add "Log Out" option in main menu so the user can get into another account if he wants.
+2. 22/01/2026 [Done - 22/01/2026] -> Add "Log Out" option in main menu so the user can get into another account if he wants.
 
-3. 22/01/2026 [Not Done] -> Fix "show all records" exception.
+3. 22/01/2026 [Done - IDK] -> Fix "show all records" exception.
+
+4. 23/01/2026 [Done - 28/01/2026] -> Fix bug: When saving entries on database, that entry is being saved the amount of times equal to the amount of habits in that entry.

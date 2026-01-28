@@ -13,6 +13,7 @@ def clear_terminal():
 
 def main_menu(username, user_id):
     clear_terminal()
+
     while True:
         answer = qst.select(
             ">>>",
@@ -25,32 +26,40 @@ def main_menu(username, user_id):
         ).ask()
 
         if answer == "Show all daily records":
-            show_all(username, user_id)
+            show_all(username)
         elif answer == "Edit(Create, Update, Delete)":
-            edit_menu(username, user_id)
+            edit_menu(user_id)
         elif answer == "Log Out":
             return
         elif answer == "Quit":
             quit()
 
 def show_all(username):
-    all_entries = api.all_entries(username)
+    all_entries = api.all_entries(username) # a list of strings representing the data
+    
+    if not all_entries: # checks if the all_entries array is empty
+        # clear_terminal()
+        print("No data entry has been detected in Database.")
+        print("Tip: Add your first track in 'Create Entry' option.")
+        return
 
     selected_date = qst.select(
         ">>>",
         choices=[
-            line for line in all_entries # this is not working (inside choices all_entries is another list, there can only be values)
+            line for line in all_entries
         ]
     ).ask()
 
     if selected_date:
-        details = api.get_habits_by_date(username, selected_date)
+        details = api.get_habits_by_date(username, selected_date) 
 
-        for habit_name, status in details:
-            icon = "✅ Done" if status == 1 else "❌ Not done"
+        print(f"\nHabits for {selected_date}:")
+        for row in details:
+            habit_name = row[0]
+            icon = "✅ Done"
             print(f"{habit_name}: {icon}")
-
-def edit_menu(username, user_id):
+            
+def edit_menu(user_id):
     while True:
         option = qst.select(
             ">>>",

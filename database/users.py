@@ -55,22 +55,19 @@ def save_tracking_habits(date, habit_name, user_id):
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
 
-    cursor.execute(f"SELECT id FROM habits WHERE habit = '{habit_name}' AND user_id = '{user_id}'")
-    result = cursor.fetchone()
+    # checking to see if there already is an entry inside the database with that user_id, that habit name and that date
+    cursor.execute(f"SELECT id FROM days WHERE user_id = '{user_id}' AND habit = '{habit_name}' AND date = '{date}'")
+    db_check = cursor.fetchone()
 
-    if result:
-        habit_id = result[0]
-    else:
-        cursor.execute(f"INSERT INTO habits (user_id, habit) VALUES ('{user_id}', '{habit_name}')")
+    # if there isn't:
+    if db_check is None:
+        # add it
+        cursor.execute(f"INSERT INTO days (user_id, habit, date) VALUES ('{user_id}', '{habit_name}', '{date}')")
         connection.commit()
-        habit_id = cursor.lastrowid
-
-    cursor.execute(f"""
-        INSERT INTO days (user_id, habit_id, date)
-        VALUES ('{user_id}', '{habit_id}', '{date}')
-    """)
-
-    connection.commit()
+    # if there is:
+    else:
+        return
+    
     connection.close()
 
 def delete_day_records(date, user_id):
